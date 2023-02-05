@@ -1,0 +1,8 @@
+mutation add($input: TodoInput!) {
+  add(input: $input) {
+    id
+    title
+    detail
+    isDone
+  }
+}
