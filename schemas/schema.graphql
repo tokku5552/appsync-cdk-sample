@@ -5,12 +5,16 @@ type Todo {
   isDone: Boolean!
 }
 type Query {
-  getTodos: [Todo!]
+  getAll: [Todo!]
+  get(id: ID!): Todo!
 }
 input TodoInput {
   title: String!
+  isDone: Boolean!
   detail: String
 }
 type Mutation {
   addTodo(input: TodoInput!): Todo
+  update(input: TodoInput!): Todo
+  delete(id: ID!): Todo
 }

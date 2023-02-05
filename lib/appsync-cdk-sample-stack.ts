@@ -32,11 +32,21 @@ export class AppsyncCdkSampleStack extends cdk.Stack {
     const dataSource = api.addDynamoDbDataSource("DynamoDataSource", table);
 
     // query
-    dataSource.createResolver("QueryResolver", {
+    dataSource.createResolver("getTodosResolver", {
       typeName: "Query",
-      fieldName: "getTodos",
+      fieldName: "getAll",
       requestMappingTemplate: appsync.MappingTemplate.dynamoDbScanTable(),
       responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList(),
+    });
+
+    dataSource.createResolver("getTodoResolver", {
+      typeName: "Query",
+      fieldName: "get",
+      requestMappingTemplate: appsync.MappingTemplate.dynamoDbGetItem(
+        "id",
+        "id"
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
     });
 
     // mutation
@@ -46,6 +56,16 @@ export class AppsyncCdkSampleStack extends cdk.Stack {
       requestMappingTemplate: appsync.MappingTemplate.dynamoDbPutItem(
         appsync.PrimaryKey.partition("id").auto(),
         appsync.Values.projecting("input")
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
+    });
+
+    dataSource.createResolver("Delete", {
+      typeName: "Mutation",
+      fieldName: "delete",
+      requestMappingTemplate: appsync.MappingTemplate.dynamoDbDeleteItem(
+        "id",
+        "id"
       ),
       responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
     });
