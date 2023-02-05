@@ -1,0 +1,8 @@
+query getAll {
+  getAll {
+    id
+    title
+    detail
+    isDone
+  }
+}
