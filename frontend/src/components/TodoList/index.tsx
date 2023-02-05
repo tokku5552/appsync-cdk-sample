@@ -14,7 +14,7 @@ export default function TodoList({ todos }: TodoListProps) {
           return (
             <>
               <ListItem>
-                <TodoItem body={todo.title} isDone={todo.isDone} />
+                <TodoItem todo={todo} />
               </ListItem>
             </>
           );

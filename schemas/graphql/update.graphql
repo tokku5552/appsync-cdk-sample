@@ -1,0 +1,8 @@
+mutation update($input: UpdateInput!) {
+  update(input: $input) {
+    id
+    title
+    detail
+    isDone
+  }
+}

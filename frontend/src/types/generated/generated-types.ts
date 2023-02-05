@@ -17,13 +17,13 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addTodo?: Maybe<Todo>;
+  add?: Maybe<Todo>;
   delete?: Maybe<Todo>;
   update?: Maybe<Todo>;
 };
 
 
-export type MutationAddTodoArgs = {
+export type MutationAddArgs = {
   input: TodoInput;
 };
 
@@ -34,7 +34,7 @@ export type MutationDeleteArgs = {
 
 
 export type MutationUpdateArgs = {
-  input: TodoInput;
+  input: UpdateInput;
 };
 
 export type Query = {
@@ -62,12 +62,109 @@ export type TodoInput = {
   title: Scalars['String'];
 };
 
+export type UpdateInput = {
+  detail?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID'];
+  isDone?: InputMaybe<Scalars['Boolean']>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type AddMutationVariables = Exact<{
+  input: TodoInput;
+}>;
+
+
+export type AddMutation = { __typename?: 'Mutation', add?: { __typename?: 'Todo', id: string, title: string, detail?: string | null, isDone: boolean } | null };
+
+export type DeleteMutationVariables = Exact<{
+  input: Scalars['ID'];
+}>;
+
+
+export type DeleteMutation = { __typename?: 'Mutation', delete?: { __typename?: 'Todo', id: string } | null };
+
 export type GetAllQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllQuery = { __typename?: 'Query', getAll?: Array<{ __typename?: 'Todo', id: string, title: string, detail?: string | null, isDone: boolean }> | null };
 
+export type UpdateMutationVariables = Exact<{
+  input: UpdateInput;
+}>;
 
+
+export type UpdateMutation = { __typename?: 'Mutation', update?: { __typename?: 'Todo', id: string, title: string, detail?: string | null, isDone: boolean } | null };
+
+
+export const AddDocument = gql`
+    mutation add($input: TodoInput!) {
+  add(input: $input) {
+    id
+    title
+    detail
+    isDone
+  }
+}
+    `;
+export type AddMutationFn = Apollo.MutationFunction<AddMutation, AddMutationVariables>;
+
+/**
+ * __useAddMutation__
+ *
+ * To run a mutation, you first call `useAddMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addMutation, { data, loading, error }] = useAddMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddMutation(baseOptions?: Apollo.MutationHookOptions<AddMutation, AddMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddMutation, AddMutationVariables>(AddDocument, options);
+      }
+export type AddMutationHookResult = ReturnType<typeof useAddMutation>;
+export type AddMutationResult = Apollo.MutationResult<AddMutation>;
+export type AddMutationOptions = Apollo.BaseMutationOptions<AddMutation, AddMutationVariables>;
+export const DeleteDocument = gql`
+    mutation delete($input: ID!) {
+  delete(id: $input) {
+    id
+  }
+}
+    `;
+export type DeleteMutationFn = Apollo.MutationFunction<DeleteMutation, DeleteMutationVariables>;
+
+/**
+ * __useDeleteMutation__
+ *
+ * To run a mutation, you first call `useDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMutation, { data, loading, error }] = useDeleteMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMutation, DeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMutation, DeleteMutationVariables>(DeleteDocument, options);
+      }
+export type DeleteMutationHookResult = ReturnType<typeof useDeleteMutation>;
+export type DeleteMutationResult = Apollo.MutationResult<DeleteMutation>;
+export type DeleteMutationOptions = Apollo.BaseMutationOptions<DeleteMutation, DeleteMutationVariables>;
 export const GetAllDocument = gql`
     query getAll {
   getAll {
@@ -105,8 +202,49 @@ export function useGetAllLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Get
 export type GetAllQueryHookResult = ReturnType<typeof useGetAllQuery>;
 export type GetAllLazyQueryHookResult = ReturnType<typeof useGetAllLazyQuery>;
 export type GetAllQueryResult = Apollo.QueryResult<GetAllQuery, GetAllQueryVariables>;
+export const UpdateDocument = gql`
+    mutation update($input: UpdateInput!) {
+  update(input: $input) {
+    id
+    title
+    detail
+    isDone
+  }
+}
+    `;
+export type UpdateMutationFn = Apollo.MutationFunction<UpdateMutation, UpdateMutationVariables>;
+
+/**
+ * __useUpdateMutation__
+ *
+ * To run a mutation, you first call `useUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMutation, { data, loading, error }] = useUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMutation, UpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMutation, UpdateMutationVariables>(UpdateDocument, options);
+      }
+export type UpdateMutationHookResult = ReturnType<typeof useUpdateMutation>;
+export type UpdateMutationResult = Apollo.MutationResult<UpdateMutation>;
+export type UpdateMutationOptions = Apollo.BaseMutationOptions<UpdateMutation, UpdateMutationVariables>;
 export const namedOperations = {
   Query: {
     getAll: 'getAll'
+  },
+  Mutation: {
+    add: 'add',
+    delete: 'delete',
+    update: 'update'
   }
 }

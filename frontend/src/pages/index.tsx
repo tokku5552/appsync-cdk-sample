@@ -1,13 +1,12 @@
-import TodoList from "@/components/TodoList";
+import { TodoInput, TodoList } from "@/components";
 import { useGetAllQuery } from "@/types/generated/generated-types";
-import { Box, Center, Flex, Heading } from "@chakra-ui/react";
-import { Inter } from "@next/font/google";
+import { Box, Center, Flex, Heading, Spinner } from "@chakra-ui/react";
 import Head from "next/head";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function Home() {
-  const { data } = useGetAllQuery();
+  const { data, loading, error } = useGetAllQuery();
+
+  if (loading) return <Spinner />;
 
   return (
     <>
@@ -17,12 +16,17 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box>
+      <Box m={8}>
         <Center>
           <Heading>Appsync Cdk Sample</Heading>
         </Center>
       </Box>
       <main>
+        <Center>
+          <Box maxW={"80%"} m={8}>
+            <TodoInput />
+          </Box>
+        </Center>
         <Flex m={4}>
           <TodoList todos={data?.getAll!} />
         </Flex>

@@ -1,6 +1,8 @@
 import * as cdk from "aws-cdk-lib";
 import * as appsync from "aws-cdk-lib/aws-appsync";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
 import path = require("path");
 
@@ -52,7 +54,7 @@ export class AppsyncCdkSampleStack extends cdk.Stack {
     // mutation
     dataSource.createResolver("MutationResolver", {
       typeName: "Mutation",
-      fieldName: "addTodo",
+      fieldName: "add",
       requestMappingTemplate: appsync.MappingTemplate.dynamoDbPutItem(
         appsync.PrimaryKey.partition("id").auto(),
         appsync.Values.projecting("input")
@@ -68,6 +70,26 @@ export class AppsyncCdkSampleStack extends cdk.Stack {
         "id"
       ),
       responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
+    });
+
+    const updateFunction = new nodejs.NodejsFunction(this, "UpdateFunction", {
+      functionName: "update-function",
+      entry: path.join(__dirname, "../lambda/update.ts"),
+      runtime: lambda.Runtime.NODEJS_18_X,
+      tracing: lambda.Tracing.ACTIVE,
+      environment: {
+        TABLE_NAME: table.tableName,
+      },
+    });
+
+    table.grantReadWriteData(updateFunction);
+    const lambdaDataSource = api.addLambdaDataSource(
+      "LambdaDataSource",
+      updateFunction
+    );
+    lambdaDataSource.createResolver("Update", {
+      typeName: "Mutation",
+      fieldName: "update",
     });
   }
 }
